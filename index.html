@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Best Friend Trades — 200 MA Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0a0a0a;
+    --surface:  #111111;
+    --border:   #1e1e1e;
+    --accent:   #c8f135;
+    --red:      #ff4444;
+    --muted:    #444;
+    --text:     #e8e8e8;
+    --subtext:  #666;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── GRID BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,241,53,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,241,53,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 6vw, 52px);
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .logo span {
+    color: var(--accent);
+  }
+
+  .tagline {
+    font-size: 11px;
+    color: var(--subtext);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: right;
+  }
+
+  /* ── INPUT SECTION ── */
+  .input-section {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    margin-bottom: 32px;
+    align-items: start;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+
+  .input-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--subtext);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  textarea {
+    width: 100%;
+    height: 130px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    padding: 14px 16px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.6;
+  }
+
+  textarea:focus {
+    border-color: var(--accent);
+  }
+
+  textarea::placeholder { color: var(--muted); }
+
+  .btn-wrap { padding-top: 24px; }
+
+  button#scanBtn {
+    background: var(--accent);
+    color: #0a0a0a;
+    border: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s, transform 0.1s;
+    width: 100%;
+  }
+
+  button#scanBtn:hover { opacity: 0.88; transform: translateY(-1px); }
+  button#scanBtn:active { transform: translateY(0); }
+  button#scanBtn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* ── STATUS BAR ── */
+  #statusBar {
+    display: none;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--subtext);
+    margin-bottom: 24px;
+    padding: 10px 14px;
+    background: var(--surface);
+    border-left: 2px solid var(--accent);
+  }
+
+  #progressFill {
+    display: inline-block;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── RESULTS ── */
+  #results { display: none; }
+
+  .results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .results-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--text);
+  }
+
+  .summary-pills {
+    display: flex;
+    gap: 10px;
+  }
+
+  .pill {
+    font-size: 11px;
+    padding: 4px 12px;
+    letter-spacing: 1px;
+  }
+
+  .pill-above { background: rgba(200,241,53,0.12); color: var(--accent); border: 1px solid rgba(200,241,53,0.25); }
+  .pill-below { background: rgba(255,68,68,0.10); color: var(--red); border: 1px solid rgba(255,68,68,0.2); }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead tr {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--subtext);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 500;
+  }
+
+  th.right, td.right { text-align: right; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+  td {
+    padding: 13px 16px;
+    font-size: 13px;
+  }
+
+  .ticker-cell {
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .ticker-cell.above { color: var(--accent); }
+  .ticker-cell.below { color: var(--red); }
+
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 3px 8px;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .badge-above { background: rgba(200,241,53,0.12); color: var(--accent); }
+  .badge-below { background: rgba(255,68,68,0.10); color: var(--red); }
+
+  .pct-above { color: var(--accent); }
+  .pct-below { color: var(--red); }
+
+  .ma-bar-wrap {
+    width: 100px;
+    height: 4px;
+    background: var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ma-bar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    transition: width 0.4s ease;
+  }
+
+  .ma-bar-fill.above { background: var(--accent); }
+  .ma-bar-fill.below { background: var(--red); }
+
+  /* ── SORT TABS ── */
+  .sort-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 12px;
+  }
+
+  .sort-tab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--subtext);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-right: -1px;
+  }
+
+  .sort-tab.active {
+    background: var(--accent);
+    color: #0a0a0a;
+    border-color: var(--accent);
+    font-weight: 600;
+    z-index: 1;
+  }
+
+  .sort-tab:hover:not(.active) { color: var(--text); border-color: var(--muted); }
+
+  /* ── ERROR ── */
+  .error-msg {
+    font-size: 12px;
+    color: var(--red);
+    padding: 4px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-size: 10px;
+    color: var(--subtext);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  /* ── LOADING ANIMATION ── */
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .blink { animation: blink 1.2s infinite; }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+  .fade-in { animation: fadeIn 0.3s ease forwards; }
+
+  tr.fade-in { opacity: 0; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .input-section { grid-template-columns: 1fr; }
+    .btn-wrap { padding-top: 0; }
+    header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .tagline { text-align: left; }
+    .results-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    th:nth-child(4), td:nth-child(4),
+    th:nth-child(5), td:nth-child(5) { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="logo">Best Friend<span>.</span>Trades</div>
+    <div class="tagline">200-Day MA Scanner<br>Free · No login</div>
+  </header>
+
+  <div class="input-section">
+    <div class="input-wrap">
+      <label class="input-label" for="tickerInput">Paste tickers — one per line or comma separated</label>
+      <textarea id="tickerInput" placeholder="NVDA&#10;AAPL&#10;MSFT&#10;AMD&#10;TSM"></textarea>
+      <div id="inputError" class="error-msg" style="display:none"></div>
+    </div>
+    <div class="btn-wrap">
+      <button id="scanBtn" onclick="runScan()">▶ SCAN</button>
+    </div>
+  </div>
+
+  <div id="statusBar">
+    <span class="blink">■</span>&nbsp;
+    <span id="statusText">Fetching data...</span>
+    &nbsp;·&nbsp;
+    <span id="progressFill">0</span>/<span id="progressTotal">0</span>
+  </div>
+
+  <div id="results">
+    <div class="results-header">
+      <div class="results-title">Results</div>
+      <div class="summary-pills">
+        <span class="pill pill-above" id="aboveCount">— above</span>
+        <span class="pill pill-below" id="belowCount">— below</span>
+      </div>
+    </div>
+
+    <div class="sort-tabs">
+      <button class="sort-tab active" onclick="sortBy('status')">STATUS</button>
+      <button class="sort-tab" onclick="sortBy('pct')">% DIFF</button>
+      <button class="sort-tab" onclick="sortBy('ticker')">A–Z</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ticker</th>
+            <th>Status</th>
+            <th class="right">Price</th>
+            <th class="right">200 MA</th>
+            <th class="right">% Diff</th>
+            <th>Distance</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>bestfriendtrades.xyz &nbsp;·&nbsp; data via Yahoo Finance &nbsp;·&nbsp; not financial advice</footer>
+
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────
+let allRows = [];
+let currentSort = 'status';
+
+// ── FETCH SINGLE TICKER (Yahoo Finance v8) ────────────────────
+async function fetchTicker(symbol) {
+  // Yahoo Finance chart API — no key needed, CORS works in browser
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1y`;
+  try {
+    const resp = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const json = await resp.json();
+    const result = json?.chart?.result?.[0];
+    if (!result) throw new Error('No data');
+
+    const closes = result.indicators.quote[0].close.filter(v => v != null);
+    if (closes.length < 50) throw new Error('Insufficient history');
+
+    const price = closes[closes.length - 1];
+
+    // 200-day MA (use all available up to 200)
+    const window = Math.min(200, closes.length);
+    const ma200  = closes.slice(-window).reduce((a, b) => a + b, 0) / window;
+
+    const pctDiff = ((price - ma200) / ma200) * 100;
+    const above   = price > ma200;
+
+    return { symbol, price, ma200, pctDiff, above, error: null };
+  } catch (e) {
+    return { symbol, price: null, ma200: null, pctDiff: null, above: null, error: e.message };
+  }
+}
+
+// ── MAIN SCAN ─────────────────────────────────────────────────
+async function runScan() {
+  const raw = document.getElementById('tickerInput').value;
+  const tickers = raw
+    .toUpperCase()
+    .split(/[\s,\n]+/)
+    .map(t => t.trim())
+    .filter(t => /^[A-Z]{1,5}$/.test(t));
+
+  const errEl = document.getElementById('inputError');
+  if (tickers.length === 0) {
+    errEl.textContent = 'Enter at least one valid ticker symbol.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  // UI: start
+  const btn = document.getElementById('scanBtn');
+  btn.disabled = true;
+  btn.textContent = '⟳ SCANNING...';
+  document.getElementById('results').style.display = 'none';
+  const statusBar = document.getElementById('statusBar');
+  statusBar.style.display = 'block';
+  document.getElementById('progressTotal').textContent = tickers.length;
+
+  allRows = [];
+  let done = 0;
+
+  // Fetch concurrently in batches of 5
+  const BATCH = 5;
+  for (let i = 0; i < tickers.length; i += BATCH) {
+    const batch = tickers.slice(i, i + BATCH);
+    const results = await Promise.all(batch.map(fetchTicker));
+    allRows.push(...results);
+    done += batch.length;
+    document.getElementById('progressFill').textContent = Math.min(done, tickers.length);
+    document.getElementById('statusText').textContent =
+      `Fetching ${batch.join(', ')}`;
+  }
+
+  // Done
+  btn.disabled = false;
+  btn.textContent = '▶ SCAN';
+  statusBar.style.display = 'none';
+
+  renderTable();
+}
+
+// ── SORT ──────────────────────────────────────────────────────
+function sortBy(key) {
+  currentSort = key;
+  document.querySelectorAll('.sort-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderTable(false);
+}
+
+function getSorted() {
+  const rows = [...allRows];
+  if (currentSort === 'status') {
+    return rows.sort((a, b) => {
+      if (a.error && !b.error) return 1;
+      if (!a.error && b.error) return -1;
+      if (a.above && !b.above) return -1;
+      if (!a.above && b.above) return 1;
+      return (b.pctDiff ?? 0) - (a.pctDiff ?? 0);
+    });
+  }
+  if (currentSort === 'pct') {
+    return rows.sort((a, b) => (b.pctDiff ?? -999) - (a.pctDiff ?? -999));
+  }
+  if (currentSort === 'ticker') {
+    return rows.sort((a, b) => a.symbol.localeCompare(b.symbol));
+  }
+  return rows;
+}
+
+// ── RENDER ────────────────────────────────────────────────────
+function renderTable(animate = true) {
+  const sorted = getSorted();
+  const above  = allRows.filter(r => r.above === true).length;
+  const below  = allRows.filter(r => r.above === false).length;
+
+  document.getElementById('aboveCount').textContent = `${above} above`;
+  document.getElementById('belowCount').textContent = `${below} below`;
+
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+
+  sorted.forEach((row, i) => {
+    const tr = document.createElement('tr');
+    if (animate) {
+      tr.classList.add('fade-in');
+      tr.style.animationDelay = `${i * 30}ms`;
+    }
+
+    if (row.error) {
+      tr.innerHTML = `
+        <td class="ticker-cell" style="color:var(--muted)">${row.symbol}</td>
+        <td colspan="5" style="color:var(--muted);font-size:12px">— ${row.error}</td>
+      `;
+    } else {
+      const cls    = row.above ? 'above' : 'below';
+      const sign   = row.pctDiff >= 0 ? '+' : '';
+      const barPct = Math.min(Math.abs(row.pctDiff) * 2.5, 100).toFixed(0);
+
+      tr.innerHTML = `
+        <td class="ticker-cell ${cls}">${row.symbol}</td>
+        <td><span class="badge badge-${cls}">${row.above ? '▲ ABOVE' : '▼ BELOW'}</span></td>
+        <td class="right">$${row.price.toFixed(2)}</td>
+        <td class="right" style="color:var(--subtext)">$${row.ma200.toFixed(2)}</td>
+        <td class="right pct-${cls}">${sign}${row.pctDiff.toFixed(1)}%</td>
+        <td>
+          <div class="ma-bar-wrap">
+            <div class="ma-bar-fill ${cls}" style="width:${barPct}%"></div>
+          </div>
+        </td>
+      `;
+    }
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('results').style.display = 'block';
+}
+
+// ── KEYBOARD SHORTCUT ─────────────────────────────────────────
+document.getElementById('tickerInput').addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runScan();
+});
+</script>
+</body>
+</html>
