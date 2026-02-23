@@ -1,15 +1,13 @@
 {
-  "scanned_at": "2026-02-23T01:27:27.644047+00:00",
-  "total_scanned": 80,
-  "stage2_count": 0,
+  "scanned_at": "2026-02-23T01:39:20.790172+00:00",
+  "total_scanned": 79,
+  "stage2_count": 3,
   "errors": [
-    "SYMBOLS FROM TC2000",
     "AAOI",
     "ACMR",
     "AEIS",
     "AG",
     "ALM",
-    "AMD",
     "ANAB",
     "AXTI",
     "BE",
@@ -52,13 +50,11 @@
     "MBIN",
     "MKSI",
     "MPWR",
-    "MRNA",
     "MSGS",
     "MU",
     "NBR",
     "NBTX",
     "NGD",
-    "NVDA",
     "ON",
     "ONTO",
     "OR",
@@ -73,7 +69,6 @@
     "SSRM",
     "STX",
     "SYRE",
-    "TSM",
     "TTMI",
     "TYRA",
     "VIAV",
@@ -84,5 +79,52 @@
     "WD",
     "WDC"
   ],
-  "results": []
+  "results": [
+    {
+      "ticker": "TSM",
+      "price": 370.54,
+      "ma50": 326.01,
+      "ma150": 288.05,
+      "score": 84,
+      "zone": "GOOD",
+      "zClass": "z-good",
+      "pctDiff": 28.6,
+      "pctAboveMa50": 13.7,
+      "flags": [
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "price": 189.82,
+      "ma50": 184.8,
+      "ma150": 182.87,
+      "score": 78,
+      "zone": "PRIME",
+      "zClass": "z-prime",
+      "pctDiff": 3.8,
+      "pctAboveMa50": 2.7,
+      "flags": [
+        "High Quality",
+        "Strong HH",
+        "At MA"
+      ]
+    },
+    {
+      "ticker": "MRNA",
+      "price": 49.87,
+      "ma50": 38.42,
+      "ma150": 30.47,
+      "score": 77,
+      "zone": "EXTENDED",
+      "zClass": "z-extended",
+      "pctDiff": 63.7,
+      "pctAboveMa50": 29.8,
+      "flags": [
+        "High Quality",
+        "Strong HH"
+      ]
+    }
+  ]
 }
