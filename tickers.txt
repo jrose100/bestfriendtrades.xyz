@@ -1,4 +1,3 @@
-Symbols from TC2000
 AAOI
 ACMR
 AEIS
