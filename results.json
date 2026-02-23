@@ -1,20 +1,8 @@
 {
-  "scanned_at": "2026-02-23T01:52:17.853821+00:00",
+  "scanned_at": "2026-02-23T12:01:53.495597+00:00",
   "total_scanned": 79,
-  "stage2_count": 49,
+  "stage2_count": 61,
   "errors": [
-    "NVDA",
-    "ON",
-    "ONTO",
-    "OR",
-    "ORLA",
-    "PAAS",
-    "PLAB",
-    "PRAX",
-    "SIMO",
-    "SKE",
-    "SNDK",
-    "SPHR",
     "SSRM",
     "STX",
     "SYRE",
@@ -104,6 +92,38 @@
       "zClass": "z-good",
       "pctDiff": 41.0,
       "pctAboveMa50": 10.9,
+      "flags": [
+        "Inst. Accum",
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
+      "ticker": "OR",
+      "price": 43.68,
+      "ma50": 39.72,
+      "ma150": 35.52,
+      "score": 93,
+      "zone": "GOOD",
+      "zClass": "z-good",
+      "pctDiff": 23.0,
+      "pctAboveMa50": 10.0,
+      "flags": [
+        "Inst. Accum",
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
+      "ticker": "PRAX",
+      "price": 335.28,
+      "ma50": 297.56,
+      "ma150": 165.95,
+      "score": 93,
+      "zone": "GOOD",
+      "zClass": "z-good",
+      "pctDiff": 102.0,
+      "pctAboveMa50": 12.7,
       "flags": [
         "Inst. Accum",
         "High Quality",
@@ -300,6 +320,85 @@
       ]
     },
     {
+      "ticker": "ONTO",
+      "price": 216.41,
+      "ma50": 190.09,
+      "ma150": 144.65,
+      "score": 85,
+      "zone": "GOOD",
+      "zClass": "z-good",
+      "pctDiff": 49.6,
+      "pctAboveMa50": 13.8,
+      "flags": [
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
+      "ticker": "ORLA",
+      "price": 18.69,
+      "ma50": 15.36,
+      "ma150": 12.55,
+      "score": 85,
+      "zone": "EXTENDED",
+      "zClass": "z-extended",
+      "pctDiff": 49.0,
+      "pctAboveMa50": 21.6,
+      "flags": [
+        "Inst. Accum",
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
+      "ticker": "PAAS",
+      "price": 64.7,
+      "ma50": 55.63,
+      "ma150": 42.32,
+      "score": 85,
+      "zone": "EXTENDED",
+      "zClass": "z-extended",
+      "pctDiff": 52.9,
+      "pctAboveMa50": 16.3,
+      "flags": [
+        "Inst. Accum",
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
+      "ticker": "SIMO",
+      "price": 134.88,
+      "ma50": 110.35,
+      "ma150": 94.4,
+      "score": 85,
+      "zone": "EXTENDED",
+      "zClass": "z-extended",
+      "pctDiff": 42.9,
+      "pctAboveMa50": 22.2,
+      "flags": [
+        "Inst. Accum",
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
+      "ticker": "SKE",
+      "price": 35.1,
+      "ma50": 28.06,
+      "ma150": 20.89,
+      "score": 85,
+      "zone": "EXTENDED",
+      "zClass": "z-extended",
+      "pctDiff": 68.0,
+      "pctAboveMa50": 25.1,
+      "flags": [
+        "Inst. Accum",
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
       "ticker": "BLTE",
       "price": 180.95,
       "ma50": 163.35,
@@ -315,6 +414,21 @@
       ]
     },
     {
+      "ticker": "PLAB",
+      "price": 38.0,
+      "ma50": 34.96,
+      "ma150": 26.59,
+      "score": 84,
+      "zone": "GOOD",
+      "zClass": "z-good",
+      "pctDiff": 42.9,
+      "pctAboveMa50": 8.7,
+      "flags": [
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
       "ticker": "JBLU",
       "price": 5.97,
       "ma50": 5.21,
@@ -324,6 +438,21 @@
       "zClass": "z-good",
       "pctDiff": 22.7,
       "pctAboveMa50": 14.6,
+      "flags": [
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
+      "ticker": "ON",
+      "price": 69.11,
+      "ma50": 60.73,
+      "ma150": 54.12,
+      "score": 83,
+      "zone": "GOOD",
+      "zClass": "z-good",
+      "pctDiff": 27.7,
+      "pctAboveMa50": 13.8,
       "flags": [
         "High Quality",
         "Strong HH"
@@ -387,6 +516,22 @@
       "flags": [
         "High Quality",
         "Strong HH"
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "price": 189.82,
+      "ma50": 184.8,
+      "ma150": 182.87,
+      "score": 78,
+      "zone": "PRIME",
+      "zClass": "z-prime",
+      "pctDiff": 3.8,
+      "pctAboveMa50": 2.7,
+      "flags": [
+        "High Quality",
+        "Strong HH",
+        "At MA"
       ]
     },
     {
@@ -632,6 +777,37 @@
       "zClass": "z-extended",
       "pctDiff": 63.7,
       "pctAboveMa50": 29.8,
+      "flags": [
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
+      "ticker": "SNDK",
+      "price": 649.97,
+      "ma50": 414.54,
+      "ma150": 220.42,
+      "score": 77,
+      "zone": "OVEREXTENDED",
+      "zClass": "z-over",
+      "pctDiff": 194.9,
+      "pctAboveMa50": 56.8,
+      "flags": [
+        "Inst. Accum",
+        "High Quality",
+        "Strong HH"
+      ]
+    },
+    {
+      "ticker": "SPHR",
+      "price": 114.24,
+      "ma50": 96.09,
+      "ma150": 71.49,
+      "score": 77,
+      "zone": "EXTENDED",
+      "zClass": "z-extended",
+      "pctDiff": 59.8,
+      "pctAboveMa50": 18.9,
       "flags": [
         "High Quality",
         "Strong HH"
